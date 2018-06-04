@@ -1,0 +1,9 @@
+<h1>Boards Index</h1>
+
+<%= link_to 'Add Board', new_board_path %>
+<br />
+<% @boards.each do |board| %>
+  <%= board.title %>
+  <%= link_to 'View', board_path(board) %>
+  <br />
+<% end %>

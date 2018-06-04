@@ -1,0 +1,5 @@
+<h1>Boards Show</h1>
+<%= @board.title %>
+<% @board.lists.each do |list| %>
+  <%= list.title %>
+<% end %>
