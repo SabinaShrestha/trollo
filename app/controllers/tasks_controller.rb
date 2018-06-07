@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :set_list
-  before_action :set_task, only: [:edit, :update, :destroy]
+  before_action :set_task, only: [:edit, :update, :destroy, :up, :down]
 
 
   def new
@@ -9,11 +9,12 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params)
+    @task = @list.tasks.new(task_params)
     if @task.save
-      redirect_to list_path(@list)
+
+      redirect_to board_path(@list.board_id)
     else
-      render :new
+      render :form
     end
   end
 
@@ -23,7 +24,7 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-      redirect_to list_path(@list)
+      redirect_to board_path(@list.board_id)
     else
       render :edit
     end
@@ -31,7 +32,24 @@ class TasksController < ApplicationController
 
   def destroy
     @task.destroy
+    redirect_to board_path(@list.board_id)
   end
+
+  def up
+    task1 = Task.where('priority > ?', @task.priority).order(:priority).first
+    @task.priority = task1.priority + 1
+    @task.save
+    redirect_to board_path(@list.board_id)
+  end
+
+  def down
+    task1 = Task.where('priority < ?', @task.priority).order(:priority).last
+    @task.priority = task1.priority - 1
+    @task.save
+    redirect_to board_path(@list.board_id)
+  end
+
+
 
   private
     def task_params

@@ -1,5 +1,27 @@
-<h1>Boards Show</h1>
-<%= @board.title %>
-<% @board.lists.each do |list| %>
-  <%= list.title %>
+<h4>Boards Show</h4>
+<h1><%= @board.title %></h1>
+<%= link_to 'Add List', new_board_list_path(@board) %>
+<br />
+<hr />
+<% @lists.each do |list| %>
+  <h1><%= list.title%></h1>
+  <br />
+    <% list.tasks.order(priority: :DESC).each do |task| %>
+      <%= task.title %>
+      <br />
+      <%= task.body %>
+      <br />
+      <%= link_to 'Edit', edit_list_task_path(list, task) %>
+      <%= link_to 'Delete', list_task_path(list, task), {method: :delete} %>
+      <%= link_to 'up', list_task_up_path(list, task) %>
+      <%= link_to 'down', list_task_down_path(list, task) %>
+      <hr />
+    <% end %>
+  <%= link_to 'Add Task', new_list_task_path(list) %>
+  <%= link_to 'View', board_list_path(@board, list) %>
+  <%= link_to 'Edit', edit_board_list_path(@board, list) %>
+  <%= link_to 'Delete', board_list_path(@board, list), {method: :delete} %>
+  <%= link_to 'up', list_up_path(list) %>
+  <%= link_to 'down', list_down_path(list) %>
+  <hr />
 <% end %>
